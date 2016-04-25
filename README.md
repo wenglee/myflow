@@ -10,7 +10,7 @@ Dflow is the butler for [Dask](http://dask.pydata.org), the DAG task scheduler. 
 ```python
 from dflow import DFlow
 from dflow import dflow, step
-from dflow import dflow_setup
+from dflow import dflow_result
 from dflow import addarg
 import argparse
 
