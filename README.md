@@ -7,6 +7,7 @@
 
 Dflow is the butler for [Dask](http://dask.pydata.org), the DAG task scheduler. It's designed and developed by @wenglee to provide a pythonic interface to model such flow using OOP class design. It does so by furnishing 3 decorators.
 
+```python
 from dflow import DFlow
 from dflow import dflow, step
 from dflow import dflow_setup
@@ -38,7 +39,7 @@ if __name__ == "__main__":
 
 	args = parser.parse_args()
 	CatMouse.run(args)
-
+```
 
 Three decorators have been introduced:
 
@@ -117,4 +118,3 @@ Valid methods are:
 
 Open sourced under the [MIT license](LICENSE.md).
 
-<3
