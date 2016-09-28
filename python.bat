@@ -1,4 +1,4 @@
-@echo on
+@echo off
 @setlocal enableextensions enabledelayedexpansion
 :: Requiers pip and setuptools to already be installed on linux subsystem
 Set "Pattern= "
@@ -33,10 +33,10 @@ for %%x in (%*) do (
 )
 :: Dump it to the interpreter
 :: Output is piped inside the Linux subsys, as windows piping for bash seems broken
-echo !args!
-:: wlee START "Terrible hack to avoid pipe error" /W /MIN C:\Windows\System32\bash.exe -c "python !args! > /mnt/c/Users/wlee/pychm.log"
-C:\Windows\System32\bash.exe -c "/mnt/c/Users/Public/Anaconda/anaconda3/bin/python !args!"
+START "Terrible hack to avoid pipe error" /W /MIN bash -c "/mnt/c/Users/Public/Anaconda/anaconda3/bin/python !args! > ~/pychmxx.log 2>&1"
+::C:\Windows\System32\bash.exe -c "/mnt/c/Users/Public/Anaconda/anaconda3/bin/python !args! > /mnt/c/Users/wlee/mytry.log"
 :: Output resulr from piped file
-:: wlee type c:\Users\wlee\pychm.log
+type C:\Users\wlee\AppData\Local\lxss\home\wlee\pychmxx.log
+bash -c "rm ~/pychmxx.log"
 :: echo !args!
 EXIT /B > NUL
