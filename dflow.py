@@ -8,7 +8,7 @@ import os
 from logging.handlers import TimedRotatingFileHandler
 import signal
 import argparse
-import smtplib
+import smtplib as smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
@@ -19,7 +19,7 @@ import types
 import pandas as pd
 import sys
 import dask
-
+import platform
 
 class DFlow():
     _dag = {}
@@ -134,7 +134,7 @@ class DFlow():
                 if p in cls._dag:
                     result = None
                     try:
-                        result = dask.async.get_sync(cls._dag, p)
+                        result = dask.async.get_sync(cls._dag, p) if platform.system() == 'Windows' else get(cls._dag,p)
                     except(Exception, KeyboardInterrupt) as e:
                         logging.error(
                             "%s: %s" % (e, traceback.print_exc()))
@@ -153,7 +153,8 @@ class DFlow():
             logging.critical("running all steps. no -step or -phase defined.")
             result = None
             try:
-                result = dask.async.get_sync(cls._dag, list(cls._dag.keys()))
+                result = dask.async.get_sync(cls._dag, list(cls._dag.keys())) if platform.system() == 'Windows' \
+                    else get(cls._dag, list(cls._dag.keys()))
             except(Exception, KeyboardInterrupt) as e:
                 logging.error("%s" % e)
                 # _send_email(
@@ -231,7 +232,7 @@ class DFlow():
                         parser.add_argument(
                             arg,
                             **DFlow._args[method][i])
-                i = i + 1
+                i += 1
 
         return parser
 
@@ -270,12 +271,17 @@ def step(*args):
     return _wrapper
 
 
-def addarg(*args, **kw) -> object:
+def addarg(*args, **kw):
     def _wrapper(func):
         if hasattr(func, '_args'):
             func._args += (args, kw)
+            # if platform.system() == 'Windows':
+            #     setattr(DFlow.args,args[0].replace('-',''), kw['default'])
         else:
             func._args = (args, kw)
+            # if platform.system() == 'Windows':
+            #     DFlow.args = lambda: None
+            #     setattr(DFlow.args, args[0].replace('-',''), kw['default'])
         return func
 
     return _wrapper
