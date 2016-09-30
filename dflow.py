@@ -20,6 +20,7 @@ import pandas as pd
 import sys
 import dask
 import platform
+from multiprocessing import freeze_support
 
 class DFlow():
     _dag = {}
@@ -31,6 +32,7 @@ class DFlow():
 
     @classmethod
     def run(cls, args=args):
+        freeze_support()
         DFlow.args = args
         cls.args = args
         rl = logging.getLogger()
